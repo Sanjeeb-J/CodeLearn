@@ -1,33 +1,182 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WEB DEVELOPMENT</title>
-  <link rel="stylesheet" href="CSS/main.css">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeLearn - Modern Web Development Tutorials</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/courses.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <h1 class="heading">WEB DEVELOPMENT COMPLETE COURSE</h1>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-code brand-icon"></i>
+                <span class="brand-text">CodeLearn</span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#" class="nav-link">Tutorials</a>
+                <a href="#" class="nav-link">Challenges</a>
+                <a href="#" class="nav-link">Projects</a>
+                <a href="#" class="nav-link">Community</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" placeholder="Search..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <span id="userName"></span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button class="login-btn" id="loginBtn" onclick="showLoginModal()">
+                    <i class="fas fa-user"></i>
+                    Login
+                </button>
+            </div>
+            
+            <div class="mobile-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-  <div class="container">
-    <div class="box">
-      <a class="link" href=""><img src="img/html.png" alt="html">HTML</a>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLoginModal()">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <p>Demo credentials: admin / password</p>
+            </form>
+        </div>
     </div>
-    <div class="box">
-      <a class="link" href=""><img src="img/css.png" alt="css">CSS</a>
-    </div>
-    <div class="box">
-      <a class="link" href=""><img src="img/javascript.png" alt="javascript">JavaScript</a>
-    </div>
-    <div class="box">
-      <a class="link" href=""><img src="img/react.png" alt="react">React</a>
-    </div>
-  </div>
 
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-grid"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Master <span class="gradient-text">Web Development</span></h1>
+            <p class="hero-subtitle">Learn modern web technologies with interactive tutorials and hands-on projects</p>
+            <div class="hero-buttons">
+                <a href="#start-learning" class="btn btn-primary">Start Learning</a>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-play"></i>
+                    Watch Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Start Learning Section -->
+    <section id="start-learning" class="start-learning-section">
+        <div class="container">
+            <h2 class="section-title">Start Your Learning Journey</h2>
+            <div class="courses-grid">
+                <a href="course.html?course=html" class="course-card" data-course="html">
+                    <div class="course-icon html">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <h3>HTML5 Fundamentals</h3>
+                    <p>Learn the structure and semantics of modern web pages</p>
+                    <div class="course-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text">Login to track progress</span>
+                </a>
+                
+                <a href="course.html?course=css" class="course-card" data-course="css">
+                    <div class="course-icon css">
+                        <i class="fab fa-css3-alt"></i>
+                    </div>
+                    <h3>CSS3 Styling</h3>
+                    <p>Master layouts, animations, and responsive design</p>
+                    <div class="course-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text">Login to track progress</span>
+                </a>
+                
+                <a href="course.html?course=javascript" class="course-card" data-course="javascript">
+                    <div class="course-icon js">
+                        <i class="fab fa-js-square"></i>
+                    </div>
+                    <h3>JavaScript Programming</h3>
+                    <p>Add interactivity and dynamic behavior to your sites</p>
+                    <div class="course-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text">Login to track progress</span>
+                </a>
+                
+                <a href="course.html?course=react" class="course-card" data-course="react">
+                    <div class="course-icon react">
+                        <i class="fab fa-react"></i>
+                    </div>
+                    <h3>React Framework</h3>
+                    <p>Build modern user interfaces with React components</p>
+                    <div class="course-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text">Login to track progress</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose CodeLearn?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Interactive Learning</h3>
+                    <p>Learn by doing with our interactive code editor and live preview</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>Join thousands of developers in our supportive learning community</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Certificates</h3>
+                    <p>Earn industry-recognized certificates to showcase your skills</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
 </body>
 </html>
