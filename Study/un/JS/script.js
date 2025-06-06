@@ -588,12 +588,26 @@ function initializeApp() {
     // Initialize all course topics for search
     initializeSearchTopics();
     
-    // Load course progress
-    loadCourseProgress();
+    // Load course progress for main page cards
+    loadCourseProgress(); // This is mainly for index.html cards
     
     // Initialize event listeners
     initializeEventListeners();
+
+    // --- New addition for course page navigation ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentCourseId = urlParams.get('course');
+    const currentLessonId = urlParams.get('lesson');
+
+    // Check if we are on a page that should display course-specific navigation
+    // and if the container element for it exists.
+    // The check for the element's existence is now primarily within populateCourseNavigation
+    if (currentCourseId) { // We just need to know if we have a course context
+        populateCourseNavigation(currentCourseId, currentLessonId);
+    }
+    // --- End of new addition ---
 }
+
 
 function initializeEventListeners() {
     // Mobile Navigation Toggle
@@ -832,21 +846,41 @@ function getCompletedLessons(courseId) {
 }
 
 function markLessonComplete(courseId, lessonId) {
-    if (!currentUser) return;
+    if (!currentUser) {
+        showNotification('Please log in to mark lessons as complete.', 'warning');
+        return;
+    }
     
     const completedLessons = getCompletedLessons(courseId);
     if (!completedLessons.includes(lessonId)) {
         completedLessons.push(lessonId);
         localStorage.setItem(`${courseId}_completed_lessons`, JSON.stringify(completedLessons));
         
-        // Update main page progress if we're on it
-        if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+        // Update main page progress if we're on it (e.g., index.html)
+        if (document.getElementById(`${courseId}-progress`)) { // Check if progress bars exist
             loadCourseProgress();
         }
         
-        showNotification(`Lesson "${lessonId}" marked as complete!`, 'success');
+        // --- Modification to refresh course navigation ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageCourseId = urlParams.get('course');
+        const pageLessonId = urlParams.get('lesson'); // Current lesson on the page
+
+        // If we are on the course page for which a lesson was just completed,
+        // refresh its navigation to show the updated status.
+        if (pageCourseId === courseId && document.getElementById('course-sidebar-topics')) {
+            populateCourseNavigation(pageCourseId, pageLessonId); // Refresh with current active lesson
+        }
+        // --- End of modification ---
+        
+        const lessonTitle = findLessonTitle(courseId, lessonId); // Get lesson title
+        showNotification(`Lesson "${lessonTitle}" marked as complete!`, 'success');
+    } else {
+        const lessonTitle = findLessonTitle(courseId, lessonId);
+        showNotification(`Lesson "${lessonTitle}" was already complete.`, 'info');
     }
 }
+
 
 function openCourse(courseId) {
     window.location.href = `course.html?course=${courseId}`;
@@ -901,6 +935,80 @@ function getNotificationIcon(type) {
         default: return 'info-circle';
     }
 }
+
+function findLessonTitle(courseId, lessonId) {
+    const course = courseData[courseId];
+    if (course) {
+        for (const section of course.sections) {
+            for (const lesson of section.lessons) {
+                if (lesson.id === lessonId) {
+                    return lesson.title;
+                }
+            }
+        }
+    }
+    return lessonId; // Fallback to id if title not found
+}
+
+function populateCourseNavigation(courseId, activeLessonId) {
+    const navContainer = document.getElementById('sidebarContent'); // Changed ID here
+    if (!navContainer) {
+        // console.warn('Course sidebar container #sidebarContent not found.');
+        return; // Silently return if the container isn't on the current page
+    }
+
+    if (!courseData[courseId]) {
+        navContainer.innerHTML = '<p style="color: var(--text-secondary); padding: 1rem;">Course data not found.</p>';
+        console.error('Course data missing for courseId:', courseId);
+        return;
+    }
+
+    const course = courseData[courseId];
+    const completedLessons = getCompletedLessons(courseId);
+    let navHTML = `<h3 style="padding: 0.5rem 1rem; margin-bottom: 0.5rem; color: var(--primary-color);">${course.title} Topics</h3>`;
+    navHTML += '<ul class="course-topic-list" style="list-style: none; padding: 0; margin: 0;">';
+
+    course.sections.forEach(section => {
+        navHTML += `<li style="padding: 0.5rem 1rem; color: var(--text-secondary); font-weight: bold; margin-top: 0.5rem;">${section.title}</li>`;
+        section.lessons.forEach(lesson => {
+            const isCompleted = completedLessons.includes(lesson.id);
+            const isActive = lesson.id === activeLessonId;
+            
+            let lessonClass = 'topic-lesson-item'; // Base class
+            if (isCompleted) lessonClass += ' completed'; // Add 'completed' class
+            if (isActive) lessonClass += ' active'; // Add 'active' class
+
+            // Define styles directly for simplicity, or use CSS classes
+            let linkStyle = 'display: block; padding: 0.5rem 1.5rem; text-decoration: none; color: var(--text-primary); border-radius: 4px; margin: 0.2rem 0; transition: background-color 0.2s ease;';
+            if (isActive) {
+                linkStyle += 'background-color: var(--primary-color); color: white;';
+            } else if (isCompleted) {
+                linkStyle += 'color: var(--text-secondary); text-decoration: line-through;'; // Style for completed
+            }
+            
+            const lessonUrl = `course.html?course=${courseId}&lesson=${lesson.id}`;
+            navHTML += `
+                <li>
+                    <a href="${lessonUrl}" class="${lessonClass}" style="${linkStyle}" 
+                       onmouseover="this.style.backgroundColor = '${isActive ? 'var(--primary-color)' : 'var(--hover-bg-color)'}'" 
+                       onmouseout="this.style.backgroundColor = '${isActive ? 'var(--primary-color)' : 'transparent'}'">
+                        ${lesson.title}
+                    </a>
+                </li>`;
+        });
+    });
+
+    navHTML += '</ul>';
+    navContainer.innerHTML = navHTML;
+
+    // Ensure active lesson is scrolled into view if nav is scrollable
+    const activeLink = navContainer.querySelector('.topic-lesson-item.active');
+    if (activeLink) {
+        activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+
 
 // Global functions for HTML onclick handlers
 window.showLoginModal = showLoginModal;
