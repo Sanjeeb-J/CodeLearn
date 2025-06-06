@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeLearn - Modern Web Development Tutorials</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-code brand-icon"></i>
+                <span class="brand-text">CodeLearn</span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#tutorials" class="nav-link">Tutorials</a>
+                <a href="#" class="nav-link">Challenges</a>
+                <a href="#" class="nav-link">Projects</a>
+                <a href="#" class="nav-link">Community</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" placeholder="Search tutorials..." class="search-input" id="searchInput">
+                    <i class="fas fa-search search-icon"></i>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <span id="userName"></span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button class="login-btn" id="loginBtn" onclick="showLoginModal()">
+                    <i class="fas fa-user"></i>
+                    Login
+                </button>
+            </div>
+            
+            <div class="mobile-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLoginModal()">&times;</span>
+            <h2>Login to CodeLearn</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+                <p class="demo-text">Demo credentials: <strong>admin</strong> / <strong>password</strong></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-grid"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Master <span class="gradient-text">Web Development</span></h1>
+            <p class="hero-subtitle">Learn modern web technologies with interactive tutorials and hands-on projects</p>
+            <div class="hero-buttons">
+                <a href="#tutorials" class="btn btn-primary">Start Learning</a>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-play"></i>
+                    Watch Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="tutorials" class="courses-section">
+        <div class="container">
+            <h2 class="section-title">Choose Your Learning Path</h2>
+            <div class="courses-grid">
+                <!-- HTML Course -->
+                <div class="course-card" data-course="html" onclick="openCourse('html')">
+                    <div class="course-header">
+                        <div class="course-icon html">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        <div class="course-info">
+                            <h3>HTML5 Fundamentals</h3>
+                            <p>Learn the structure and semantics of modern web pages</p>
+                        </div>
+                    </div>
+                    <div class="course-progress">
+                        <div class="progress-bar" id="html-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="course-stats">
+                        <span class="progress-text" id="html-text">0% Complete</span>
+                        <span class="lesson-count" id="html-count">0/62 Lessons</span>
+                    </div>
+                </div>
+                
+                <!-- CSS Course -->
+                <div class="course-card" data-course="css" onclick="openCourse('css')">
+                    <div class="course-header">
+                        <div class="course-icon css">
+                            <i class="fab fa-css3-alt"></i>
+                        </div>
+                        <div class="course-info">
+                            <h3>CSS3 Styling</h3>
+                            <p>Master layouts, animations, and responsive design</p>
+                        </div>
+                    </div>
+                    <div class="course-progress">
+                        <div class="progress-bar" id="css-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="course-stats">
+                        <span class="progress-text" id="css-text">0% Complete</span>
+                        <span class="lesson-count" id="css-count">0/88 Lessons</span>
+                    </div>
+                </div>
+                
+                <!-- JavaScript Course -->
+                <div class="course-card" data-course="javascript" onclick="openCourse('javascript')">
+                    <div class="course-header">
+                        <div class="course-icon js">
+                            <i class="fab fa-js-square"></i>
+                        </div>
+                        <div class="course-info">
+                            <h3>JavaScript Programming</h3>
+                            <p>Add interactivity and dynamic behavior to your sites</p>
+                        </div>
+                    </div>
+                    <div class="course-progress">
+                        <div class="progress-bar" id="javascript-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="course-stats">
+                        <span class="progress-text" id="javascript-text">0% Complete</span>
+                        <span class="lesson-count" id="javascript-count">0/134 Lessons</span>
+                    </div>
+                </div>
+                
+                <!-- React Course -->
+                <div class="course-card" data-course="react" onclick="openCourse('react')">
+                    <div class="course-header">
+                        <div class="course-icon react">
+                            <i class="fab fa-react"></i>
+                        </div>
+                        <div class="course-info">
+                            <h3>React Framework</h3>
+                            <p>Build modern user interfaces with React components</p>
+                        </div>
+                    </div>
+                    <div class="course-progress">
+                        <div class="progress-bar" id="react-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="course-stats">
+                        <span class="progress-text" id="react-text">0% Complete</span>
+                        <span class="lesson-count" id="react-count">0/31 Lessons</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose CodeLearn?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Interactive Learning</h3>
+                    <p>Learn by doing with our interactive code editor and live preview</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>Join thousands of developers in our supportive learning community</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Certificates</h3>
+                    <p>Earn industry-recognized certificates to showcase your skills</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Developer</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="img/image.png" alt="profile_pic" class="profile_pic">
+                    <h3>Sanjeeb J</h3>
+                    <p>A passionate Front-End Web-Developer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub YouTube Instagram Linkedin Mail -->
+
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="JS/script.js"></script>
+</body>
+</html>
