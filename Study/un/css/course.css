@@ -422,3 +422,8 @@
         font-size: 1.25rem;
     }
 }
+
+.anchor {
+    color: white;
+    text-decoration: none;
+}
