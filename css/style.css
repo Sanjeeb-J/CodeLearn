@@ -39,6 +39,8 @@ body {
     padding: 0 2rem;
 }
 
+/* ... keep existing code (all the CSS from style.css) ... */
+
 /* Navigation */
 .navbar {
     background: rgba(15, 15, 35, 0.95);
@@ -870,10 +872,14 @@ body {
     background: var(--secondary-color);
 }
 
-
 .profile_pic{
     width: 100px;
     height: 100px;
     border-radius: 50px;
     object-fit: cover;
+}
+
+.anchor {
+    color: white;
+    text-decoration: none;
 }
